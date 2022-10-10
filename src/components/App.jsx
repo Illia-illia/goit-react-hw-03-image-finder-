@@ -20,7 +20,7 @@ export class App extends Component {
       <Wrap>
         <GlobalStyle />
         <Searchbar onSubmit={this.onFormSubmit} />
-        <ImageGallery />
+        <ImageGallery imageRequest={this.state.imageRequest} />
         <ToastContainer autoClose={3000} />
       </Wrap>
     );
