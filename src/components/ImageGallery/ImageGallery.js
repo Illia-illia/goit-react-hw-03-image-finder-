@@ -10,23 +10,29 @@ const BASE_URL = 'https://pixabay.com/api/?';
 export class ImageGallery extends Component {
   state = {
     images: null,
+    isLoading: false,
   };
   async componentDidUpdate(prevProps, _) {
     const prevRequest = prevProps.imageRequest;
     const nextRequest = this.props.imageRequest;
     if (prevRequest !== nextRequest) {
+      this.setState({ isLoading: true });
       await fetch(
         `${BASE_URL}q=${nextRequest}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
       )
         .then(r => r.json())
-        .then(images => this.setState({ images }));
+        .then(images => this.setState({ images }))
+        .finally(() => this.setState({ isLoading: false }));
     }
   }
   render() {
+    const { images, isLoading } = this.state;
+    const { imageRequest } = this.props;
     return (
       <ImagesList>
-        {!this.state.images && <p>Please enter a request</p>}
-        {this.state.images && <ImageGalleryItem images={this.state.images} />}
+        {isLoading && <div>LOADING...</div>}
+        {!imageRequest && <p>Please enter a request</p>}
+        {images && <ImageGalleryItem images={images} />}
       </ImagesList>
     );
   }
