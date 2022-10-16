@@ -25,7 +25,7 @@ export class ImageGallery extends Component {
       )
         .then(r => r.json())
         .then(images => {
-          if (images.hits.length === 0) {
+          if (images.length === []) {
             this.setState({
               images: [],
             });
@@ -33,15 +33,20 @@ export class ImageGallery extends Component {
               'Sorry, there are no images matching your search query. Please try again.'
             );
           }
+
           if (this.state.page > 1) {
-            console.log(prevState.images.hits);
-            this.setState({
-              images: { hits: [...prevState.images.hits, ...images.hits] },
+            console.log(prevState.images);
+            console.log('new', images.hits);
+            const all = [...prevState.images, ...images.hits];
+            console.log('all', all);
+            return this.setState({
+              images: [...prevState.images, ...images.hits],
               isLoading: false,
             });
           }
+
           return this.setState({
-            images,
+            images: images.hits,
             isLoading: false,
           });
         });
@@ -61,9 +66,9 @@ export class ImageGallery extends Component {
         <ImagesList>
           {isLoading && <div>LOADING...</div>}
           {!imageRequest && <p>Please enter a request</p>}
-          {images.hits && <ImageGalleryItem images={images} />}
+          {images && <ImageGalleryItem images={images} />}
         </ImagesList>
-        {images.hits && (
+        {images.length > 0 && (
           <Button type="button" onClick={this.onLoadMore}>
             Load more
           </Button>
