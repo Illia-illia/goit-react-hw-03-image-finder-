@@ -23,7 +23,7 @@ export class Searchbar extends Component {
     e.preventDefault();
 
     if (this.state.imageRequest.trim() === '') {
-      return toast.error('please enter a request');
+      return toast.error('Please enter a request');
     }
     this.props.onSubmit(this.state.imageRequest.trim());
     this.setState({ imageRequest: '' });
